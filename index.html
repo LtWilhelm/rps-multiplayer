@@ -21,11 +21,11 @@
         <img src="" alt="" id="enemy-choice" hidden>
     </div>
     <div class="fighter" id="friendly-zone">
-        <p id="friendly-name">Friendly</p>
+        <p id="friendly-name"></p>
         <div id="buttons" hidden>
             <img src="./assets/images/attack.png" alt="" class="player-choice" data-move="attack">
             <img src="./assets/images/shield.png" alt="" class="player-choice" data-move="shield">
-            <img src="/assets/images/magic.png" alt="" class="player-choice" data-move="magic">
+            <img src="./assets/images/magic.png" alt="" class="player-choice" data-move="magic">
         </div>
         <button id="leave">Leave Game</button>
     </div>
@@ -38,8 +38,11 @@
         <small id="error"></small>
     </div>
 
+    <button id="show-chat">Chat</button>
     <div id="chat" hidden>
-        <div id="chatheader">Chat</div>
+        <div id="chatheader">Chat
+            <button id='hide-chat'>Hide</button>
+        </div>
         <div id="chat-history">
         </div><hr>
         <form>
@@ -50,7 +53,7 @@
 
     <div id="result" hidden></div>
 
-    <button id="reset">Reset</button>
+    <button id="reset" hidden>Reset</button>
 
     <script src="./assets/js/script.js"></script>
 </body>

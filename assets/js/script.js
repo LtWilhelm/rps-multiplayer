@@ -120,9 +120,23 @@ $('#send').on('click', function () {
     $('#chat-input').val('');
 });
 
+$('#show-chat').on('click', function(){
+    $('#chat').show('slow');
+    $('#show-chat').hide('fast');
+});
+
+$('#hide-chat').on('click', function(){
+    $('#chat').hide('slow');
+    $('#show-chat').show('fast');
+});
+
 // Firebase update events
 database.ref('rps/' + games[gameIndex]).on('value', function (parentData) {
     let stuff = parentData.val();
+    if (!stuff.user1.status && !stuff.user2.status) {
+        database.ref('rps/' + games[gameIndex] + '/chat').set('');
+    }
+    
     if (gameState) {
         // too lazy to rewrite... should be way simpler since the data already exists. Shrug
         database.ref('rps/' + games[gameIndex] + '/' + enemy).once('value').then(function (snapshot) {

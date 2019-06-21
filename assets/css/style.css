@@ -1,9 +1,20 @@
+@import url('https://fonts.googleapis.com/css?family=Roboto&display=swap');
+
 * {
     box-sizing: border-box;
 }
 
+body {
+    font-family: 'Robot', sans-serif;
+    background-color: teal;
+}
+
+strong {
+    font-weight: bold;
+}
+
 .fighter {
-    height: 5em;
+    min-height: 5em;
     width: 100%;
     font-size: 3em;
     text-align: center;
@@ -109,4 +120,40 @@ button {
 #chat-history {
     background-color: white;
     min-height: 7em;
+}
+
+#show-chat, #hide-chat {
+    visibility: hidden;
+}
+
+#show-chat {
+    position: absolute;
+    left: 0;
+    top: 50%;
+}
+
+#hide-chat {
+    float: right;
+}
+
+@media screen and (max-width: 480px) {
+    .fighter {
+        min-height: 0;
+    }
+    
+    .fighter img {
+        width: 25%;
+    }
+
+    #chat {
+        /* visibility: hidden; */
+        width: 100%;
+        max-height: 100%;
+        top: 0;
+    }
+
+    #show-chat, #hide-chat {
+        visibility: visible;
+    }
+    
 }

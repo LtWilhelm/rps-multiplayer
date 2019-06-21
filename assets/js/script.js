@@ -6,6 +6,8 @@ let gameIndex = 0;
 let ready = false;
 let name;
 
+let phrases = ['Say hi...', 'Maybe some smack talk?', 'Chat here!', "Tell them what's up!", 'Throw some shade...']
+
 let chats = [];
 
 let wins = 0;
@@ -25,6 +27,11 @@ firebase.initializeApp(firebaseConfig);
 
 const database = firebase.database();
 const ref = firebase.database().ref('rps');
+
+function randomPhrase () {
+    let phrase = phrases[Math.floor(Math.random() * phrases.length)];
+    $('#chat-input').attr('placeholder', phrase);
+}
 
 function compare(choice1, choice2) {
     switch (choice1 + "-" + choice2) {
@@ -61,6 +68,8 @@ function gameEnd(result) {
         showHidden();
     }, 1500);
 }
+
+randomPhrase();
 
 // click events
 $('#join').on('click', function () {
@@ -118,6 +127,7 @@ $('#send').on('click', function () {
     event.preventDefault();
     database.ref('rps/' + games[gameIndex] + '/chat').push('<strong>' + name + ':</strong> ' +  $('#chat-input').val());
     $('#chat-input').val('');
+    randomPhrase();
 });
 
 $('#show-chat').on('click', function(){
@@ -136,7 +146,7 @@ database.ref('rps/' + games[gameIndex]).on('value', function (parentData) {
     if (!stuff.user1.status && !stuff.user2.status) {
         database.ref('rps/' + games[gameIndex] + '/chat').set('');
     }
-    
+
     if (gameState) {
         // too lazy to rewrite... should be way simpler since the data already exists. Shrug
         database.ref('rps/' + games[gameIndex] + '/' + enemy).once('value').then(function (snapshot) {
@@ -200,7 +210,7 @@ database.ref('rps/' + games[gameIndex] + '/chat').on('child_added', function(chi
     $('#chat-history').append(p);
 });
 
-// Draggable code
+// Draggable code - borrowed for the sake of experimentation
 dragElement(document.getElementById('chat'));
 
 function dragElement(elmnt) {

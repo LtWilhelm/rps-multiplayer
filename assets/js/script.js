@@ -73,6 +73,7 @@ randomPhrase();
 
 // click events
 $('#join').on('click', function () {
+    event.preventDefault();
     name = $('#name-input').val();
     if (name) {
         database.ref('rps/' + games[gameIndex]).once('value').then(function (snapshot) {

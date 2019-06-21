@@ -134,11 +134,13 @@ $('#send').on('click', function () {
 $('#show-chat').on('click', function(){
     $('#chat').show('slow');
     $('#show-chat').hide('fast');
+    $('#show-chat').attr('style', '');
 });
 
 $('#hide-chat').on('click', function(){
     $('#chat').hide('slow');
     $('#show-chat').show('fast');
+    $('#show-chat').attr('style', '');
 });
 
 // Firebase update events
@@ -209,6 +211,7 @@ database.ref('rps/' + games[gameIndex] + '/chat').on('child_added', function(chi
     let data = childSnapshot.val();
     let p = $('<p>').html(data);
     $('#chat-history').append(p);
+    $('#show-chat').attr('style', 'background-color:red');
 });
 
 // Draggable code - borrowed for the sake of experimentation

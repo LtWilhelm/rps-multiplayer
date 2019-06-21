@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ready, set, fight!</title>
+    <link rel="stylesheet" href="./assets/css/reset.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+
+    <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.0.4/firebase-database.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js" integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
+  
+</head>
+
+<body>
+    <div class="fighter" id="enemy-zone">
+        <p id="enemy-name">Waiting for challenger...</p>
+        <img src="" alt="" id="enemy-choice" hidden>
+    </div>
+    <div class="fighter" id="friendly-zone">
+        <p id="friendly-name">Friendly</p>
+        <div id="buttons" hidden>
+            <img src="./assets/images/attack.png" alt="" class="player-choice" data-move="attack">
+            <img src="./assets/images/shield.png" alt="" class="player-choice" data-move="shield">
+            <img src="/assets/images/magic.png" alt="" class="player-choice" data-move="magic">
+        </div>
+        <button id="leave">Leave Game</button>
+    </div>
+
+    <div id="name-prompt">
+        <h2>What is your name?</h2>
+        <hr>
+        <input type="text" id="name-input">
+        <button id="join">Join</button><br>
+        <small id="error"></small>
+    </div>
+
+    <div id="chat" hidden>
+        <div id="chatheader">Chat</div>
+        <div id="chat-history">
+        </div><hr>
+        <form>
+            <input type="text" id="chat-input">
+            <button id="send">Send</button>
+        </form><hr>
+    </div>
+
+    <div id="result" hidden></div>
+
+    <button id="reset">Reset</button>
+
+    <script src="./assets/js/script.js"></script>
+</body>
+
+</html>

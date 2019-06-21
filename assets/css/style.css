@@ -1,0 +1,112 @@
+* {
+    box-sizing: border-box;
+}
+
+.fighter {
+    height: 5em;
+    width: 100%;
+    font-size: 3em;
+    text-align: center;
+    box-shadow: 0 0 10px black;
+}
+
+.fighter img {
+    border-radius: .5em;
+}
+
+#friendly-zone {
+    background-color: orange;
+    position: fixed;
+    bottom: 0;
+}
+
+#enemy-zone {
+    background-color: lightblue;
+    position: fixed;
+    top: 0;
+}
+
+#name-prompt {
+    background-color: gray;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px black;
+    padding: 1em;
+    border-radius: 1em;
+}
+
+#name-prompt h2 {
+    color: white;
+    font-size: 1.5em;
+}
+
+input {
+    margin-bottom: .5em;
+    border: thin 3px orange;
+    border-radius: .5em;
+    padding: .5em;
+}
+
+button {
+    margin-bottom: .5em;
+    padding: .5em;
+    border-radius: 1em;
+    border: thin lightblue;
+}
+
+#error {
+    color: lightblue;
+}
+
+#reset {
+    position: relative;
+}
+
+#result {
+    background-color: gray;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 10px black;
+    padding: .5em;
+    border-radius: .5em;
+    font-size: 5em;
+    color: white;
+}
+
+#chat {
+    background-color: lightgray;
+    position: absolute;
+    top: 50%;
+    box-shadow: 0 0 10px black;
+    border-radius: 1em;
+    width: 25%;
+}
+
+#chat button {
+    background-color: orange;
+    margin-right: 1em;
+}
+
+#chat input {
+    margin-left: 1em;
+    width: 80%;
+}
+
+#chatheader {
+    background-color: gray;
+    color: lightblue;
+    font-size: 2em;
+    padding: .2em;
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+    cursor: move;
+}
+
+#chat-history {
+    background-color: white;
+    min-height: 7em;
+}

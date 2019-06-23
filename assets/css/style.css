@@ -81,7 +81,7 @@ th:last-child {
     background-color: darkslateblue;
 }
 
-#name-prompt {
+.modal {
     background-color: gray;
     position: fixed;
     top: 50%;
@@ -90,9 +90,10 @@ th:last-child {
     box-shadow: 0 0 10px black;
     padding: 1em;
     border-radius: 1em;
+    z-index: 10;
 }
 
-#name-prompt h2 {
+.modal h2 {
     color: white;
     font-size: 1.5em;
 }
@@ -108,7 +109,10 @@ button {
     margin-bottom: .5em;
     padding: .5em;
     border-radius: 1em;
-    border: thin lightblue;
+    border: double orange;
+}
+button:disabled {
+    border: none;
 }
 
 #error {
@@ -189,15 +193,14 @@ button {
     float: right;
 }
 
-#devzone {
-    height: 4em;
-    position: absolute;
-    bottom: -2em;
-    right: 0;
+#find-game {
+    display: flex;
+    flex-wrap: wrap;
+    max-width: 310px;
+    justify-content: space-around;
 }
-
-#devzone:hover {
-    bottom: 0;
+#find-game h2, hr {
+    flex-basis: 100%;
 }
 
 @media screen and (max-width: 480px) {
@@ -225,5 +228,9 @@ button {
 
     #enemy-zone {
         min-height: 3em;
+    }
+
+    #find-game {
+        width: 100%;
     }
 }

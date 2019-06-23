@@ -27,6 +27,27 @@ firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 const ref = firebase.database().ref('rps');
 
+function createGame () {
+    game = $('#game-name').val();
+    database.ref('rps/' + game).set({
+        chat: '',
+        user1: {
+            choice: '',
+            losses: 0,
+            name: '',
+            status: false,
+            wins: 0
+        },
+        user2: {
+            choice: '',
+            losses: 0,
+            name: '',
+            status: false,
+            wins: 0
+        }
+    });
+}
+
 function randomPhrase () {
     let phrase = phrases[Math.floor(Math.random() * phrases.length)];
     $('#chat-input').attr('placeholder', phrase);
@@ -75,16 +96,25 @@ function showChatOnStart () {
 }
 
 function reset() {
-    database.ref('rps/game0/user1/status').set(false);
-    database.ref('rps/game0/user2/status').set(false);
-    database.ref('rps/game0/user1/choice').set('');
-    database.ref('rps/game0/user2/choice').set('');
+    database.ref('rps/' + game +  '/user1/status').set(false);
+    database.ref('rps/' + game +  '/user2/status').set(false);
+    database.ref('rps/' + game + '/user1/choice').set('');
+    database.ref('rps/' + game + '/user2/choice').set('');
     database.ref('rps/' + game + '/chat').set('');
 }
 
 randomPhrase();
 
 // click events
+$('#find-game').on('click', '#join-game', function(){
+    $('#find-game').hide('slow');
+    $('#name-prompt').show('slow');
+});
+
+$('#create-game').on('click', function() {
+    $('#find-game').html('<h2>Create Game</h2><hr><input type="text" id="game-name"><button id="create" class="#join-game">Create</button>')
+});
+
 $('#join').on('click', function () {
     event.preventDefault();
     name = $('#name-input').val();

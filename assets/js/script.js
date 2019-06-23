@@ -27,6 +27,10 @@ firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 const ref = firebase.database().ref('rps');
 
+function joinGame (mode) {
+
+}
+
 function createGame () {
     game = $('#game-name').val();
     database.ref('rps/' + game).set({
@@ -46,6 +50,7 @@ function createGame () {
             wins: 0
         }
     });
+    createDBListeners();    
 }
 
 function randomPhrase () {
@@ -106,13 +111,23 @@ function reset() {
 randomPhrase();
 
 // click events
-$('#find-game').on('click', '#join-game', function(){
+$('#find-game').on('click', '.join-game', function(){
     $('#find-game').hide('slow');
     $('#name-prompt').show('slow');
 });
 
 $('#create-game').on('click', function() {
-    $('#find-game').html('<h2>Create Game</h2><hr><input type="text" id="game-name"><button id="create" class="#join-game">Create</button>')
+    $('#find-game').html('<h2>Create Game</h2><hr><input type="text" id="game-name"><button id="create" class="#join-game">Create</button><small id="error"></small>');
+});
+
+$('#find-game').on('click', '#create', function(){
+    if ($('#game-name').val()) {
+        createGame();
+        $('#find-game').hide('slow');
+        $('#name-prompt').show('slow');    
+    } else {
+        $('#error').text('Please type a name for the game');
+    }
 });
 
 $('#join').on('click', function () {
@@ -184,79 +199,81 @@ $('#hide-chat').on('click', function(){
 });
 
 // Firebase update events
-database.ref('rps/' + game).on('value', function (parentData) {
-    let stuff = parentData.val();
-    if (!stuff.user1.status && !stuff.user2.status) {
-        database.ref('rps/' + game + '/chat').set('');
-        $('#show-chat').attr('style', '');
-
-    }
-
-    if (gameState) {
-        // too lazy to rewrite... should be way simpler since the data already exists. Shrug
-        database.ref('rps/' + game + '/' + enemy).once('value').then(function (snapshot) {
-            let data = snapshot.val();
-            if (data.status) {
-                $('#enemy-name').text(data.name);
-            }
-            if (data.choice) {
-                $('#enemy-choice').attr('src', './assets/images/' + data.choice + '.png');
-            }
-        });
-        database.ref('rps/' + game + '/' + user).once('value').then(function (snapshot) {
-            let data = snapshot.val();
-            if (data.status) {
-                $('#friendly-name').text(data.name);
-            }
-        });
-
-        if (stuff.user1.choice && stuff.user2.choice && ready) {
-            ready = false;
-            let result = compare(stuff.user1.choice, stuff.user2.choice);
-            let end;
-            switch (result) {
-                case user:
-                    console.log('win');
-                    wins++;
-                    end = 'Victory!';
-                    break;
-                case enemy:
-                    console.log('lose');
-                    losses++;
-                    end = 'Defeat!';
-                    break;
-                case 'draw':
-                    console.log('draw');
-                    end = 'Draw!';
-                    break;
-            }
-            database.ref('rps/' + game + '/' + user + '/choice').set('');
-            $('#enemy-choice').show('slow');
-            setTimeout(() => {
-                gameEnd(end);
-                $('#enemy-choice').hide('slow');
-                $('#wins').text(wins);
-                $('#losses').text(losses);    
-            }, 1000);
-            console.log(wins, losses);
+function createDBListeners () {
+    database.ref('rps/' + game).on('value', function (parentData) {
+        let stuff = parentData.val();
+        if (!stuff.user1.status && !stuff.user2.status) {
+            database.ref('rps/' + game + '/chat').set('');
+            $('#show-chat').attr('style', '');
+    
         }
-    }
-});
-
-database.ref('rps/' + game + '/chat').on('value', function(snapshot){
-    if (!snapshot.val()){
-        $('#chat-history').empty();
-    }
-});
-
-database.ref('rps/' + game + '/chat').on('child_added', function(childSnapshot){
-    console.log(childSnapshot.val());
-    let data = childSnapshot.val();
-    let p = $('<p>').html(data);
-    $('#chat-history').append(p);
-    $('#show-chat').attr('style', 'background-color:red');
-});
-
+    
+        if (gameState) {
+            // too lazy to rewrite... should be way simpler since the data already exists. Shrug
+            database.ref('rps/' + game + '/' + enemy).once('value').then(function (snapshot) {
+                let data = snapshot.val();
+                if (data.status) {
+                    $('#enemy-name').text(data.name);
+                }
+                if (data.choice) {
+                    $('#enemy-choice').attr('src', './assets/images/' + data.choice + '.png');
+                }
+            });
+            database.ref('rps/' + game + '/' + user).once('value').then(function (snapshot) {
+                let data = snapshot.val();
+                if (data.status) {
+                    $('#friendly-name').text(data.name);
+                }
+            });
+    
+            if (stuff.user1.choice && stuff.user2.choice && ready) {
+                ready = false;
+                let result = compare(stuff.user1.choice, stuff.user2.choice);
+                let end;
+                switch (result) {
+                    case user:
+                        console.log('win');
+                        wins++;
+                        end = 'Victory!';
+                        break;
+                    case enemy:
+                        console.log('lose');
+                        losses++;
+                        end = 'Defeat!';
+                        break;
+                    case 'draw':
+                        console.log('draw');
+                        end = 'Draw!';
+                        break;
+                }
+                database.ref('rps/' + game + '/' + user + '/choice').set('');
+                $('#enemy-choice').show('slow');
+                setTimeout(() => {
+                    gameEnd(end);
+                    $('#enemy-choice').hide('slow');
+                    $('#wins').text(wins);
+                    $('#losses').text(losses);    
+                }, 1000);
+                console.log(wins, losses);
+            }
+        }
+    });
+    
+    database.ref('rps/' + game + '/chat').on('value', function(snapshot){
+        if (!snapshot.val()){
+            $('#chat-history').empty();
+        }
+    });
+    
+    database.ref('rps/' + game + '/chat').on('child_added', function(childSnapshot){
+        console.log(childSnapshot.val());
+        let data = childSnapshot.val();
+        let p = $('<p>').html(data);
+        $('#chat-history').append(p);
+        $('#show-chat').attr('style', 'background-color:red');
+    });
+    
+}
 // Draggable code - borrowed for the sake of experimentation
 dragElement(document.getElementById('chat'));
 

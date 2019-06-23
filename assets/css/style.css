@@ -157,6 +157,7 @@ button:disabled {
 #chat button {
     background-color: orange;
     margin-right: 1em;
+    border: thin;
 }
 
 #chat input {

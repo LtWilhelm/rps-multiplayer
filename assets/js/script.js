@@ -155,11 +155,11 @@ $('#join').on('click', function () {
             }
             database.ref('rps/' + game + '/' + user + '/status').set(true);
             database.ref('rps/' + game + '/' + user + '/name').set(name);
+            createDBListeners();
         });
     } else {
         $('#error').text('Please enter a name');
     }
-    createDBListeners();
 });
 
 $('.player-choice').on('click', function () {

@@ -28,7 +28,7 @@ const database = firebase.database();
 const ref = firebase.database().ref('rps');
 
 function joinGame (mode) {
-
+// TODO find way to search all games
 }
 
 function createGame () {

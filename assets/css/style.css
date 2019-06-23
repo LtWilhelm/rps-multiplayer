@@ -37,6 +37,34 @@ strong {
     top: 0;
 }
 
+#friendly-score {
+    position: absolute;
+    top: -3em;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: magenta;
+    color: whitesmoke;
+    border-radius: .5em;
+    font-size: .75em;
+    box-shadow: 0 0 20px;
+}
+
+th {
+    font-weight: bold;
+    padding: .2em;
+}
+
+th:first-child {
+    border-top-left-radius: .5em;
+}
+th:last-child {
+    border-top-right-radius: .5em;
+}
+
+#tablehead {
+    background-color: darkmagenta;
+}
+
 #name-prompt {
     background-color: gray;
     position: fixed;
@@ -95,6 +123,7 @@ button {
     box-shadow: 0 0 10px black;
     border-radius: 1em;
     width: 25%;
+    min-width: 380px;
 }
 
 #chat button {
@@ -146,7 +175,6 @@ button {
     }
 
     #chat {
-        /* visibility: hidden; */
         width: 100%;
         max-height: 100%;
         top: 0;

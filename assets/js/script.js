@@ -69,6 +69,20 @@ function gameEnd(result) {
     }, 1500);
 }
 
+function showChatOnStart () {
+    if (parseInt(window.innerWidth) > 480) {
+        $('#chat').show('slow');
+    }
+}
+
+function reset() {
+    database.ref('rps/game0/user1/status').set(false);
+    database.ref('rps/game0/user2/status').set(false);
+    database.ref('rps/game0/user1/choice').set('');
+    database.ref('rps/game0/user2/choice').set('');
+    database.ref('rps/' + games[gameIndex] + '/chat').set('');
+}
+
 randomPhrase();
 
 // click events
@@ -84,14 +98,14 @@ $('#join').on('click', function () {
                 enemy = 'user2';
                 $('#name-prompt').hide('slow');
                 showHidden();
-                $('#chat').show('slow');
+                showChatOnStart();
             } else if (!data.user2.status) {
                 gameState = true;
                 user = 'user2';
                 enemy = 'user1';
                 $('#name-prompt').hide('slow');
                 showHidden();
-                $('#chat').show('slow');
+                showChatOnStart();
             } else {
                 $('#error').text('Sorry, there are no available spots...');
             }
@@ -112,17 +126,14 @@ $('.player-choice').on('click', function () {
 
 $('#leave').on('click', function () {
     database.ref('rps/' + games[gameIndex] + '/' + user + '/status').set(false);
+    database.ref('rps/' + games[gameIndex] + '/' + user + '/choice').set('');
     user = '';
     enemy = '';
     gameState = false;
     document.write('GOODBYE');
 });
 
-$('#reset').on('click', function () {
-    database.ref('rps/game0/user1/status').set(false);
-    database.ref('rps/game0/user2/status').set(false);
-    database.ref('rps/' + games[gameIndex] + '/chat').set('');
-});
+$('#reset').on('click', reset);
 
 $('#send').on('click', function () {
     event.preventDefault();
@@ -148,6 +159,8 @@ database.ref('rps/' + games[gameIndex]).on('value', function (parentData) {
     let stuff = parentData.val();
     if (!stuff.user1.status && !stuff.user2.status) {
         database.ref('rps/' + games[gameIndex] + '/chat').set('');
+        $('#show-chat').attr('style', '');
+
     }
 
     if (gameState) {
@@ -193,6 +206,8 @@ database.ref('rps/' + games[gameIndex]).on('value', function (parentData) {
             setTimeout(() => {
                 gameEnd(end);
                 $('#enemy-choice').hide('slow');
+                $('#wins').text(wins);
+                $('#losses').text(losses);    
             }, 1000);
             console.log(wins, losses);
         }

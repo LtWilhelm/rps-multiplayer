@@ -42,7 +42,19 @@ strong {
     top: -3em;
     left: 50%;
     transform: translateX(-50%);
-    background-color: magenta;
+    background-color: rgb(156, 63, 63);
+    color: whitesmoke;
+    border-radius: .5em;
+    font-size: .75em;
+    box-shadow: 0 0 20px;
+}
+
+#enemy-score {
+    position: absolute;
+    top: 7.2em;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: slateblue;
     color: whitesmoke;
     border-radius: .5em;
     font-size: .75em;
@@ -52,6 +64,7 @@ strong {
 th {
     font-weight: bold;
     padding: .2em;
+    margin: 1em;
 }
 
 th:first-child {
@@ -61,8 +74,11 @@ th:last-child {
     border-top-right-radius: .5em;
 }
 
-#tablehead {
-    background-color: darkmagenta;
+#friendly-score th {
+    background-color: darkred;
+}
+#enemy-score th {
+    background-color: darkslateblue;
 }
 
 #name-prompt {
@@ -100,7 +116,15 @@ button {
 }
 
 #reset {
-    position: relative;
+    position: absolute;
+    /* top: 2.5em; */
+    bottom: 0;
+    right: 0;
+    opacity: 0;
+}
+
+#reset:hover {
+    opacity: 1;
 }
 
 #result {
@@ -165,6 +189,17 @@ button {
     float: right;
 }
 
+#devzone {
+    height: 4em;
+    position: absolute;
+    bottom: -2em;
+    right: 0;
+}
+
+#devzone:hover {
+    bottom: 0;
+}
+
 @media screen and (max-width: 480px) {
     .fighter {
         min-height: 0;
@@ -184,4 +219,11 @@ button {
         visibility: visible;
     }
     
+    #enemy-score {
+        top: 4.5em;
+    }
+
+    #enemy-zone {
+        min-height: 3em;
+    }
 }

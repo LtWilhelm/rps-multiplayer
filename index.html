@@ -19,6 +19,16 @@
     <div class="fighter" id="enemy-zone">
         <p id="enemy-name">Waiting for challenger...</p>
         <img src="" alt="" id="enemy-choice" hidden>
+        <table id="enemy-score">
+                <tr class="tablehead">
+                    <th>Wins</th>
+                    <th>Losses</th>
+                </tr>
+                <tr>
+                    <td id="enemy-wins">0</td>
+                    <td id="enemy-losses">0</td>
+                </tr>
+        </table>
     </div>
     <div class="fighter" id="friendly-zone">
         <table id="friendly-score">
@@ -65,7 +75,9 @@
 
     <div id="result" hidden></div>
 
-    <button id="reset" hidden>Reset</button>
+    <div id="devzone">
+    </div>
+    <button id="reset">Reset</button>
 
     <script src="./assets/js/script.js"></script>
 </body>

@@ -1,8 +1,7 @@
 let user;
 let enemy;
 let gameState = false;
-let games = ['game0'];
-let gameIndex = 0;
+let game = 'game0';
 let ready = false;
 let name;
 
@@ -80,7 +79,7 @@ function reset() {
     database.ref('rps/game0/user2/status').set(false);
     database.ref('rps/game0/user1/choice').set('');
     database.ref('rps/game0/user2/choice').set('');
-    database.ref('rps/' + games[gameIndex] + '/chat').set('');
+    database.ref('rps/' + game + '/chat').set('');
 }
 
 randomPhrase();
@@ -90,7 +89,7 @@ $('#join').on('click', function () {
     event.preventDefault();
     name = $('#name-input').val();
     if (name) {
-        database.ref('rps/' + games[gameIndex]).once('value').then(function (snapshot) {
+        database.ref('rps/' + game).once('value').then(function (snapshot) {
             let data = snapshot.val();
             if (!data.user1.status) {
                 gameState = true;
@@ -109,8 +108,8 @@ $('#join').on('click', function () {
             } else {
                 $('#error').text('Sorry, there are no available spots...');
             }
-            database.ref('rps/' + games[gameIndex] + '/' + user + '/status').set(true);
-            database.ref('rps/' + games[gameIndex] + '/' + user + '/name').set(name);
+            database.ref('rps/' + game + '/' + user + '/status').set(true);
+            database.ref('rps/' + game + '/' + user + '/name').set(name);
         });
     } else {
         $('#error').text('Please enter a name');
@@ -120,13 +119,13 @@ $('#join').on('click', function () {
 
 $('.player-choice').on('click', function () {
     ready = true;
-    database.ref('rps/' + games[gameIndex] + '/' + user + '/choice').set($(this).attr('data-move'));
+    database.ref('rps/' + game + '/' + user + '/choice').set($(this).attr('data-move'));
     hide();
 });
 
 $('#leave').on('click', function () {
-    database.ref('rps/' + games[gameIndex] + '/' + user + '/status').set(false);
-    database.ref('rps/' + games[gameIndex] + '/' + user + '/choice').set('');
+    database.ref('rps/' + game + '/' + user + '/status').set(false);
+    database.ref('rps/' + game + '/' + user + '/choice').set('');
     user = '';
     enemy = '';
     gameState = false;
@@ -137,7 +136,7 @@ $('#reset').on('click', reset);
 
 $('#send').on('click', function () {
     event.preventDefault();
-    database.ref('rps/' + games[gameIndex] + '/chat').push('<strong>' + name + ':</strong> ' +  $('#chat-input').val());
+    database.ref('rps/' + game + '/chat').push('<strong>' + name + ':</strong> ' +  $('#chat-input').val());
     $('#chat-input').val('');
     randomPhrase();
 });
@@ -155,17 +154,17 @@ $('#hide-chat').on('click', function(){
 });
 
 // Firebase update events
-database.ref('rps/' + games[gameIndex]).on('value', function (parentData) {
+database.ref('rps/' + game).on('value', function (parentData) {
     let stuff = parentData.val();
     if (!stuff.user1.status && !stuff.user2.status) {
-        database.ref('rps/' + games[gameIndex] + '/chat').set('');
+        database.ref('rps/' + game + '/chat').set('');
         $('#show-chat').attr('style', '');
 
     }
 
     if (gameState) {
         // too lazy to rewrite... should be way simpler since the data already exists. Shrug
-        database.ref('rps/' + games[gameIndex] + '/' + enemy).once('value').then(function (snapshot) {
+        database.ref('rps/' + game + '/' + enemy).once('value').then(function (snapshot) {
             let data = snapshot.val();
             if (data.status) {
                 $('#enemy-name').text(data.name);
@@ -174,7 +173,7 @@ database.ref('rps/' + games[gameIndex]).on('value', function (parentData) {
                 $('#enemy-choice').attr('src', './assets/images/' + data.choice + '.png');
             }
         });
-        database.ref('rps/' + games[gameIndex] + '/' + user).once('value').then(function (snapshot) {
+        database.ref('rps/' + game + '/' + user).once('value').then(function (snapshot) {
             let data = snapshot.val();
             if (data.status) {
                 $('#friendly-name').text(data.name);
@@ -201,7 +200,7 @@ database.ref('rps/' + games[gameIndex]).on('value', function (parentData) {
                     end = 'Draw!';
                     break;
             }
-            database.ref('rps/' + games[gameIndex] + '/' + user + '/choice').set('');
+            database.ref('rps/' + game + '/' + user + '/choice').set('');
             $('#enemy-choice').show('slow');
             setTimeout(() => {
                 gameEnd(end);
@@ -214,14 +213,13 @@ database.ref('rps/' + games[gameIndex]).on('value', function (parentData) {
     }
 });
 
-database.ref('rps/' + games[gameIndex] + '/chat').on('value', function(snapshot){
+database.ref('rps/' + game + '/chat').on('value', function(snapshot){
     if (!snapshot.val()){
         $('#chat-history').empty();
     }
 });
 
-
-database.ref('rps/' + games[gameIndex] + '/chat').on('child_added', function(childSnapshot){
+database.ref('rps/' + game + '/chat').on('child_added', function(childSnapshot){
     console.log(childSnapshot.val());
     let data = childSnapshot.val();
     let p = $('<p>').html(data);

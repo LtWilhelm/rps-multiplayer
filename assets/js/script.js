@@ -159,7 +159,7 @@ $('#join').on('click', function () {
     } else {
         $('#error').text('Please enter a name');
     }
-
+    createDBListeners();
 });
 
 $('.player-choice').on('click', function () {

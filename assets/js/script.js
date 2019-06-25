@@ -12,6 +12,7 @@ let chats = [];
 let wins = 0;
 let losses = 0;
 
+/* #region  firebaseinit */
 let firebaseConfig = {
     apiKey: "AIzaSyCfu5kEk-9UxRv2-F3Qa6hELFINV1GUPVM",
     authDomain: "lernding.firebaseapp.com",
@@ -27,11 +28,14 @@ firebase.initializeApp(firebaseConfig);
 const database = firebase.database();
 const ref = firebase.database().ref('rps');
 
-function joinGame (mode) {
-// TODO find way to search all games
+/* #endregion */
+
+/* #region  func dec */
+function joinGame(mode) {
+    // TODO find way to search all games
 }
 
-function createGame () {
+function createGame() {
     game = $('#game-name').val();
     database.ref('rps/' + game).set({
         chat: '',
@@ -50,10 +54,10 @@ function createGame () {
             wins: 0
         }
     });
-    createDBListeners();    
+    createDBListeners();
 }
 
-function randomPhrase () {
+function randomPhrase() {
     let phrase = phrases[Math.floor(Math.random() * phrases.length)];
     $('#chat-input').attr('placeholder', phrase);
 }
@@ -94,37 +98,40 @@ function gameEnd(result) {
     }, 1500);
 }
 
-function showChatOnStart () {
+function showChatOnStart() {
     if (parseInt(window.innerWidth) > 480) {
         $('#chat').show('slow');
     }
 }
 
 function reset() {
-    database.ref('rps/' + game +  '/user1/status').set(false);
-    database.ref('rps/' + game +  '/user2/status').set(false);
+    database.ref('rps/' + game + '/user1/status').set(false);
+    database.ref('rps/' + game + '/user2/status').set(false);
     database.ref('rps/' + game + '/user1/choice').set('');
     database.ref('rps/' + game + '/user2/choice').set('');
     database.ref('rps/' + game + '/chat').set('');
 }
 
+/* #endregion */
+
 randomPhrase();
 
+/* #region  click events */
 // click events
-$('#find-game').on('click', '.join-game', function(){
+$('#find-game').on('click', '.join-game', function () {
     $('#find-game').hide('slow');
     $('#name-prompt').show('slow');
 });
 
-$('#create-game').on('click', function() {
+$('#create-game').on('click', function () {
     $('#find-game').html('<h2>Create Game</h2><hr><input type="text" id="game-name"><button id="create" class="#join-game">Create</button><small id="error"></small>');
 });
 
-$('#find-game').on('click', '#create', function(){
+$('#find-game').on('click', '#create', function () {
     if ($('#game-name').val()) {
         createGame();
         $('#find-game').hide('slow');
-        $('#name-prompt').show('slow');    
+        $('#name-prompt').show('slow');
     } else {
         $('#error').text('Please type a name for the game');
     }
@@ -175,39 +182,41 @@ $('#leave').on('click', function () {
     enemy = '';
     gameState = false;
     document.write('GOODBYE');
+    // TODO reset scores in db to zero, display that the opponent has left
 });
 
 $('#reset').on('click', reset);
 
 $('#send').on('click', function () {
     event.preventDefault();
-    database.ref('rps/' + game + '/chat').push('<strong>' + name + ':</strong> ' +  $('#chat-input').val());
+    database.ref('rps/' + game + '/chat').push('<strong>' + name + ':</strong> ' + $('#chat-input').val());
     $('#chat-input').val('');
     randomPhrase();
 });
 
-$('#show-chat').on('click', function(){
+$('#show-chat').on('click', function () {
     $('#chat').show('slow');
     $('#show-chat').hide('fast');
     $('#show-chat').attr('style', '');
 });
 
-$('#hide-chat').on('click', function(){
+$('#hide-chat').on('click', function () {
     $('#chat').hide('slow');
     $('#show-chat').show('fast');
     $('#show-chat').attr('style', '');
 });
 
-// Firebase update events
-function createDBListeners () {
+/* #endregion */
+
+function createDBListeners() {
     database.ref('rps/' + game).on('value', function (parentData) {
         let stuff = parentData.val();
         if (!stuff.user1.status && !stuff.user2.status) {
             database.ref('rps/' + game + '/chat').set('');
             $('#show-chat').attr('style', '');
-    
+
         }
-    
+
         if (gameState) {
             // too lazy to rewrite... should be way simpler since the data already exists. Shrug
             database.ref('rps/' + game + '/' + enemy).once('value').then(function (snapshot) {
@@ -225,7 +234,7 @@ function createDBListeners () {
                     $('#friendly-name').text(data.name);
                 }
             });
-    
+
             if (stuff.user1.choice && stuff.user2.choice && ready) {
                 ready = false;
                 let result = compare(stuff.user1.choice, stuff.user2.choice);
@@ -252,28 +261,31 @@ function createDBListeners () {
                     gameEnd(end);
                     $('#enemy-choice').hide('slow');
                     $('#wins').text(wins);
-                    $('#losses').text(losses);    
+                    $('#losses').text(losses);
                 }, 1000);
                 console.log(wins, losses);
+                // TODO push wins and losses to db, make them display on opponent's screen
             }
         }
     });
-    
-    database.ref('rps/' + game + '/chat').on('value', function(snapshot){
-        if (!snapshot.val()){
+
+    database.ref('rps/' + game + '/chat').on('value', function (snapshot) {
+        if (!snapshot.val()) {
             $('#chat-history').empty();
         }
     });
-    
-    database.ref('rps/' + game + '/chat').on('child_added', function(childSnapshot){
+
+    database.ref('rps/' + game + '/chat').on('child_added', function (childSnapshot) {
         console.log(childSnapshot.val());
         let data = childSnapshot.val();
         let p = $('<p>').html(data);
         $('#chat-history').append(p);
         $('#show-chat').attr('style', 'background-color:red');
     });
-    
+
 }
+
+/* #region  draggable elements */
 // Draggable code - borrowed for the sake of experimentation
 dragElement(document.getElementById('chat'));
 
@@ -310,3 +322,5 @@ function dragElement(elmnt) {
         document.onmousemove = null;
     }
 }
+
+/* #endregion */

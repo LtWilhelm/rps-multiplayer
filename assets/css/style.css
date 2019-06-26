@@ -177,7 +177,8 @@ button:disabled {
 
 #chat-history {
     background-color: white;
-    min-height: 7em;
+    height: 7em;
+    overflow-y: scroll;
 }
 
 #show-chat, #hide-chat {

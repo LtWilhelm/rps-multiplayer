@@ -279,7 +279,9 @@ function createDBListeners() {
         console.log(childSnapshot.val());
         let data = childSnapshot.val();
         let p = $('<p>').html(data);
+        let ch = document.getElementById('chat-history')
         $('#chat-history').append(p);
+        ch.scrollTop = ch.scrollHeight;    
         $('#show-chat').attr('style', 'background-color:red');
     });
 
